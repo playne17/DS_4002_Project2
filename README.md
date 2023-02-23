@@ -15,3 +15,12 @@
 ### Table of Contents
 
 ## REFERENCES 
+D. Abril, “Fake job postings are stealing applicants’ money and identities,” The Washington Post, December 22, 2022.  [Online]. Available: https://www.washingtonpost.com/technology/2022/12/22/job-posting-scam-tips/. [Accessed: February 9, 2023].
+
+D. Shah, “Author Text Classification using Naive Bayes Algorithm,” June 19, 2020. [Online]. Available: https://rpubs.com/drshah96/629986. [Accessed: February 21, 2023].
+
+R. Benjamin, “Scraping Glassdoor using Selenium and Python 2022,” July 9, 2022. [Online]. Available: https://medium.com/@benjaminrohan010/scraping-glassdoor-using-selenium-and-python-2022-bd0065775aec. [Accessed: February 21, 2023].
+
+S. Bansal, “Real / Fake Job Posting Prediction,” February 28, 2020. [Online]. Available: https://www.kaggle.com/datasets/shivamb/real-or-fake-fake-jobposting-prediction. [Accessed: February 9, 2023].
+
+S. Loukas, “Text Classification Using Naive Bayes: Theory & A Working Example,” Towards Data Science, October 12, 2020. [Online]. Available: https://towardsdatascience.com/text-classification-using-naive-bayes-theory-a-working-example-2ef4b7eb7d5a. [Accessed February 9, 2023].
