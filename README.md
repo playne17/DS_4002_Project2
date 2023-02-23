@@ -19,6 +19,7 @@ After building the Naive Bayes model, it will necessary to scrape data from Glas
 https://www.kaggle.com/datasets/shivamb/real-or-fake-fake-jobposting-prediction
 
 ### Relevant notes about the use of data
+While there are clearly many variables in our dataset, we are training our model based on job description exclusively, so we recommend dropping the rest of the columns.
 
 ## FIGURES 
 ### Table of Contents
