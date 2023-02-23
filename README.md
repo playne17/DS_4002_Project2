@@ -23,6 +23,7 @@ https://www.kaggle.com/datasets/shivamb/real-or-fake-fake-jobposting-prediction
 While there are clearly many variables in our dataset, we are training our model based on job description exclusively, so we recommend dropping the rest of the columns.
 
 ## FIGURES 
+IN PROGRESS TBU
 ### Table of Contents
 
 ## REFERENCES 
