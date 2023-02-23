@@ -12,7 +12,12 @@ After building the Naive Bayes model, it will necessary to scrape data from Glas
 
 ## DATA 
 ### Data Dictionary
+<img width="387" alt="Screen Shot 2023-02-23 at 8 55 44 AM" src="https://user-images.githubusercontent.com/104598450/220928112-d1a16484-94c4-44ac-b7f6-0a5091063914.png">
+<img width="386" alt="Screen Shot 2023-02-23 at 8 55 55 AM" src="https://user-images.githubusercontent.com/104598450/220928133-26d7f93c-9cf2-4760-b5c5-5e426d6003a1.png">
+
 ### Link to Data
+https://www.kaggle.com/datasets/shivamb/real-or-fake-fake-jobposting-prediction
+
 ### Relevant notes about the use of data
 
 ## FIGURES 
