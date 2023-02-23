@@ -4,11 +4,12 @@
 
 ## SRC 
 ### Installing / Building Code
-The primary source code for preparing the data for Naive Bayes can be found here as well as in the SRC Folder:
+The primary reference code for preparing the data for Naive Bayes can be found here:
 https://rpubs.com/drshah96/629986
 
 ### Usage of Code
-After building the Naive Bayes model, it will necessary to scrape data from Glassdoor to run it through the model. 
+After building the Naive Bayes model, it will necessary to scrape data from Glassdoor to run it through the model. We used code from the following source:
+https://medium.com/@benjaminrohan010/scraping-glassdoor-using-selenium-and-python-2022-bd0065775aec 
 
 ## DATA 
 ### Data Dictionary
