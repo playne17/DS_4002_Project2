@@ -1,0 +1,153 @@
+---
+title: "Project 1 EDA"
+author: "Peter Layne (RPL2WA)"
+date: "2/9/2023"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+
+```
+
+```{r}
+jobs <- read_csv("/Users/peterlayne/DS-4002/DS-4002/fake_job_postings.csv")
+```
+
+```{r}
+jobdata <- jobs[, c("description", "fraudulent")]
+
+set.seed(1205)
+jobs_index <- caret::createDataPartition(jobdata$fraudulent, times=1, p=.7, groups = 1, list = FALSE)
+train <- jobdata[jobs_index,]
+test_tune <- jobdata[-jobs_index,]
+ttind <- caret::createDataPartition(test_tune$fraudulent, times=1, p=.5, groups = 1, list = FALSE)
+tune <- test_tune[ttind,]
+test <- test_tune[-ttind,]
+dim(train)
+dim(tune)
+dim(test)
+
+write_csv(train, "/Users/peterlayne/DS-4002/DS-4002/train_fraud.csv")
+write_csv(tune, "/Users/peterlayne/DS-4002/DS-4002/tune_fraud.csv")
+write_csv(test, "/Users/peterlayne/DS-4002/DS-4002/test_fraud.csv")
+```
+
+```{r}
+library(tm)
+
+#Creating Corpus
+suppressWarnings(Data_test_corpus <- Corpus(VectorSource(test$description)))
+suppressWarnings(Data_train_corpus <- Corpus(VectorSource(train$description)))
+suppressWarnings(Data_tune_corpus <- Corpus(VectorSource(tune$description)))
+
+#Corpus Cleaning
+suppressWarnings(Data_test_corpus_clean <- tm_map(Data_test_corpus, tolower))
+suppressWarnings(Data_train_corpus_clean <- tm_map(Data_train_corpus, tolower))
+suppressWarnings(Data_tune_corpus_clean <- tm_map(Data_tune_corpus, tolower))
+
+suppressWarnings(Data_test_corpus_clean <- tm_map(Data_test_corpus_clean, removeNumbers))
+suppressWarnings(Data_train_corpus_clean <- tm_map(Data_train_corpus_clean, removeNumbers))
+suppressWarnings(Data_tune_corpus_clean <- tm_map(Data_tune_corpus_clean, removeNumbers))
+
+suppressWarnings(Data_test_corpus_clean <- tm_map(Data_test_corpus_clean, removeWords, stopwords()))
+suppressWarnings(Data_train_corpus_clean <- tm_map(Data_train_corpus_clean, removeWords, stopwords()))
+suppressWarnings(Data_tune_corpus_clean <- tm_map(Data_tune_corpus_clean, removeWords, stopwords()))
+
+suppressWarnings(Data_test_corpus_clean <- tm_map(Data_test_corpus_clean, removePunctuation))
+suppressWarnings(Data_train_corpus_clean <- tm_map(Data_train_corpus_clean, removePunctuation))
+suppressWarnings(Data_tune_corpus_clean <- tm_map(Data_tune_corpus_clean, removePunctuation))
+
+suppressWarnings(Data_test_corpus_clean <- tm_map(Data_test_corpus_clean, stripWhitespace))
+suppressWarnings(Data_train_corpus_clean <- tm_map(Data_train_corpus_clean, stripWhitespace))
+suppressWarnings(Data_tune_corpus_clean <- tm_map(Data_tunet_corpus_clean, stripWhitespace))
+
+suppressWarnings(inspect(Data_train_corpus_clean[1]))
+
+```
+
+
+```{r}
+library(wordcloud)
+wordcloud(Data_test_corpus_clean, min.freq = 40, random.order = FALSE)
+
+```
+
+
+```{r}
+test_matrix <- DocumentTermMatrix(Data_test_corpus_clean)
+train_matrix <- DocumentTermMatrix(Data_train_corpus_clean)
+tune_matrix <- DocumentTermMatrix(Data_tune_corpus_clean)
+inspect(train_dtm)
+```
+
+```{r}
+frequentwords <- findFreqTerms(train_matrix, 5)
+
+Dictionary <- function(x) {
+        if( is.character(x) ) {
+                return (x)
+        }
+        stop('x is not a character vector')
+}
+
+data_dict <- Dictionary(findFreqTerms(train_matrix, 5))
+
+#Appending Document Term Matrix to Train and Test Dataset 
+data_train <- DocumentTermMatrix(Data_train_corpus_clean, list(data_dict))
+data_test <- DocumentTermMatrix(Data_test_corpus_clean, list(data_dict))
+data_tune <- DocumentTermMatrix(Data_tune_corpus_clean, list(data_dict))
+
+#Converting the frequency of word to count
+convert_counts <- function(x) {
+        x <- ifelse(x > 0, 1, 0)
+        x <- factor(x, levels = c(0, 1), labels = c("No", "Yes")) 
+        return(x)
+}
+
+#Appending count function to Train and Test Dataset
+data_train <- apply(data_train, MARGIN = 2, convert_counts)
+data_test <- apply(data_test, MARGIN = 2, convert_counts)
+data_tune <- apply(data_tune, MARGIN = 2, convert_counts)
+``` 
+
+```{r}
+library(e1071)
+data_classifier <- naiveBayes(data_tune, tune$fraudulent)
+
+
+```
+
+
+```{r}
+library(gmodels)
+data_test_prediction <- predict(data_classifier, data_test)
+CrossTable(data_test_prediction, test$fraudulent,
+           prop.chisq = FALSE, prop.t = FALSE,
+           dnn = c('predicted', 'actual'))
+
+```
+
+
+
+```{r}
+remote_pred <- predict(data_classifier, remotedata)
+regular_pred <- predict(data_classifier, regdata)
+```
+
+```{r}
+summary(remote_pred)
+#Remote postings had 580 "0"s or non-Fraudulent and 20 "1"s or fraudulent postings, meaning only 3.3% of postings were fraudulent
+summary(regular_pred)
+#Regular postings had 463 "0"s or non-Fraudulent and 137 "1"s or fraudulent postings, meaning 22.83% of postings were fraudulent
+```
+
+
+```
