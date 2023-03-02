@@ -1,0 +1,234 @@
+---
+title: "Final Model Building Code"
+author: "Peter Layne (RPL2WA)"
+date: "2/28/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+install.packages("caret")
+library(caret)
+install.packages("tm")
+library(tm)
+install.packages("e1071")
+library(e1071)
+library(gmodels)
+```
+
+
+```{r}
+fraud_total <- read.csv('fake_job_postings.csv')
+summary(fraud_total)
+
+#reducing df to just description and fraudulent indicator
+fraud_data <- fraud_total[, c("description", "fraudulent")]
+
+summary(fraud_data)
+
+```
+
+
+```{r}
+# only run this if not in virtual env, if you are in virtual env you will have to partition locally and write out to your disk and read it here
+
+#bypassing this by conducting caret operations on local machine. caret library doesn't work on this virtual env
+library(caret)
+
+set.seed(1205)
+fraud_index <- caret::createDataPartition(fraud_data$fraudulent, times=1, p=.7, groups = 1, list = FALSE)
+fraud_train <- fraud_data[fraud_index,]
+
+test_tune <- fraud_data[-fraud_index,]
+ttind <- caret::createDataPartition(test_tune$fraudulent, times=1, p=.5, groups = 1, list = FALSE)
+fraud_tune <- test_tune[ttind,]
+fraud_test <- test_tune[-ttind,]
+dim(fraud_train)
+dim(fraud_tune)
+dim(fraud_test)
+
+train <- fraud_train
+tune <- fraud_tune
+test <- fraud_test
+
+
+str(fraud_train)
+
+```
+
+```{r}
+#bringing in train, tune, and test sets from local machine
+train <- read.csv('train_fraud.csv')
+tune <- read.csv('tune_fraud.csv')
+test <- read.csv('test_fraud.csv')
+
+#all dataframes
+
+```
+
+```{r}
+#Chunk to reduce size of the train set to avoid problems with how it saves as a variable
+
+#reducing size of train to 75% in order to circumvent RAM capacity problem
+fraud_train_index <- caret::createDataPartition(train$fraudulent, times=1, p=.40, groups = 1, list = FALSE)
+fraud_train_40 <- fraud_train[fraud_train_index,]
+train <- fraud_train_40
+
+str(train)
+str(tune)
+
+
+```
+
+```{r}
+#cleaning corpus
+
+
+
+#Creating Corpus
+suppressWarnings(Data_test_corpus <- Corpus(VectorSource(test$description)))
+suppressWarnings(Data_train_corpus <- Corpus(VectorSource(train$description)))
+suppressWarnings(Data_tune_corpus <- Corpus(VectorSource(tune$description)))
+
+#Corpus Cleaning
+suppressWarnings(Data_test_corpus_clean <- tm_map(Data_test_corpus, tolower))
+suppressWarnings(Data_train_corpus_clean <- tm_map(Data_train_corpus, tolower))
+suppressWarnings(Data_tune_corpus_clean <- tm_map(Data_tune_corpus, tolower))
+
+suppressWarnings(Data_test_corpus_clean <- tm_map(Data_test_corpus_clean, removeNumbers))
+suppressWarnings(Data_train_corpus_clean <- tm_map(Data_train_corpus_clean, removeNumbers))
+suppressWarnings(Data_tune_corpus_clean <- tm_map(Data_tune_corpus_clean, removeNumbers))
+
+suppressWarnings(Data_test_corpus_clean <- tm_map(Data_test_corpus_clean, removeWords, stopwords()))
+suppressWarnings(Data_train_corpus_clean <- tm_map(Data_train_corpus_clean, removeWords, stopwords()))
+suppressWarnings(Data_tune_corpus_clean <- tm_map(Data_tune_corpus_clean, removeWords, stopwords()))
+
+suppressWarnings(Data_test_corpus_clean <- tm_map(Data_test_corpus_clean, removePunctuation))
+suppressWarnings(Data_train_corpus_clean <- tm_map(Data_train_corpus_clean, removePunctuation))
+suppressWarnings(Data_tune_corpus_clean <- tm_map(Data_tune_corpus_clean, removePunctuation))
+
+suppressWarnings(Data_test_corpus_clean <- tm_map(Data_test_corpus_clean, stripWhitespace))
+suppressWarnings(Data_train_corpus_clean <- tm_map(Data_train_corpus_clean, stripWhitespace))
+suppressWarnings(Data_tune_corpus_clean <- tm_map(Data_tune_corpus_clean, stripWhitespace))
+
+suppressWarnings(inspect(Data_train_corpus_clean[1]))
+
+head(train)
+
+class(Data_train_corpus_clean)
+class(Data_tune_corpus_clean)
+class(Data_test_corpus_clean)
+
+#All "SimpleCorpus" "Corpus"
+
+```
+
+
+```{r}
+
+
+#Sparse Matrix
+test_dtm <- DocumentTermMatrix(Data_test_corpus_clean)
+train_dtm <- DocumentTermMatrix(Data_train_corpus_clean)
+
+tune_dtm <- DocumentTermMatrix(Data_tune_corpus_clean)
+
+class(train_dtm)
+class(tune_dtm)
+class(test_dtm)
+#At this point, all train_dtm tune_dtm and test_dtm are "DocumentTermMatrix" and "simple_triplet_matrix"
+
+```
+
+```{r}
+
+
+##### Preparing Training, tuning, and Testing Datasets #####
+### Creating Indicator features for frequent words ###
+FreqWords <- findFreqTerms(train_dtm, 5)
+
+
+#Saving List using Dictionary() Function
+Dictionary <- function(x) {
+        if( is.character(x) ) {
+                return (x)
+        }
+        stop('x is not a character vector')
+}
+
+data_dict <- Dictionary(findFreqTerms(train_dtm, 5))
+
+str(data_dict)
+
+#Appending Document Term Matrix to Train and Test Dataset 
+data_train <- DocumentTermMatrix(Data_train_corpus_clean, list(data_dict))
+data_test <- DocumentTermMatrix(Data_test_corpus_clean, list(data_dict))
+
+data_tune <- DocumentTermMatrix(Data_tune_corpus_clean, list(data_dict))
+
+
+
+
+class(data_train) # "DocumentTermMatrix" "simple_triplet_matrix"
+class(data_test)  # "DocumentTermMatrix" "simple_triplet_matrix"
+class(data_tune)  # "DocumentTermMatrix "simple_triplet_matrix"
+
+
+#Converting the frequency of word to count
+convert_counts <- function(x) {
+        x <- ifelse(x > 0, 1, 0)
+        x <- factor(x, levels = c(0, 1), labels = c("No", "Yes")) 
+        return(x)
+}
+
+#Appending count function to Train and Test Dataset
+data_train <- apply(data_train, MARGIN = 2, convert_counts)
+data_test <- apply(data_test, MARGIN = 2, convert_counts)
+
+data_tune <- apply(data_tune, MARGIN = 2, convert_counts)
+
+#https://www.rc.virginia.edu/userinfo/rivanna/login/
+
+class(data_train) #
+class(data_test)  # Should be: "matrix" "array". Here it is:
+class(data_tune)  # Should be: "matrix" "array". Here it is:
+
+# we have to manually coerce our train set from a DocumentTermMatrix to a dataframe in order to run it through the train set given its size, for the sake of trouble shooting I've decided to create new variables for each but in theory you could just continue to write over "data_train"
+data_train_m <- as.matrix(data_train)
+data_train_final <- as.data.frame(data_train_m)
+```
+
+
+```{r}
+#Naive Bayes Classification
+
+data_classifier <- naiveBayes(data_train_final, train$fraudulent)
+```
+
+Running and testing the model
+```{r}
+library(gmodels)
+data_test_pred <- predict(data_classifier, data_test)
+
+CrossTable(data_test_pred, test$fraudulent,
+           prop.chisq = FALSE, prop.t = FALSE,
+           dnn = c('predicted', 'actual'))
+
+```
+
+```{r}
+remote_pred <- predict(data_classifier, remotedata)
+regular_pred <- predict(data_classifier, regdata)
+```
+
+```{r}
+summary(remote_pred)
+#469 "0s" or non fradualent and 131 "1s" or fraudulent. 21.83% of jobs expected to be fraudulent
+summary(regular_pred)
+#190 "0s" or non fraudulent and 410 "1s" or fruadulent. 68.33% of jobs expected to be fraudulent!
+```
+
+
