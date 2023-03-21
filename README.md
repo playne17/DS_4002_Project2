@@ -1,6 +1,6 @@
 # DS 4002 Project 1
 
-## For our first project, we are testing the following hypothesis: there are more fraudulent job postings (as a percentage) for remote jobs than in-person jobs. Our hypothesis is motivated by the increase in remote jobs since the start of the COVID-19 pandemic. To help navigate our repository, adhere to the following sections. The "SOURCE" section shows how we install, build, and use our code. The "DATA" folder will enable you to see our data dictionary, a link to the Kaggle source, and notes about how we use the data. The "FIGURES" folder contains all of the figures produced and summarizes the takeaways. The "REFERENCES" section acknowledges the sources for our analysis. 
+## For our Second project, we are testing the following hypothesis: The Port of Long Beach is on average busier than The Port of San Francisco. Our hypothesis is motivated by the desire to better understand the American supply chain. To help navigate our repository, adhere to the following sections. The "SOURCE" section shows how we install, build, and use our code. The "DATA" folder will enable you to see our data dictionary, a link to the Kaggle source, and notes about how we use the data. The "FIGURES" folder contains all of the figures produced and summarizes the takeaways. The "REFERENCES" section acknowledges the sources for our analysis. 
 
 ## SRC 
 ### Installing / Building Code
@@ -20,7 +20,6 @@ https://medium.com/@benjaminrohan010/scraping-glassdoor-using-selenium-and-pytho
 https://www.kaggle.com/datasets/shivamb/real-or-fake-fake-jobposting-prediction
 
 ### Relevant notes about the use of data
-While there are clearly many variables in our dataset, we are training our model based on job description exclusively, so we recommend dropping the rest of the columns.
 
 ## FIGURES 
 A confusion matrix and summary of our results are included within the figures section
@@ -28,12 +27,14 @@ A confusion matrix and summary of our results are included within the figures se
 ### Table of Contents
 
 ## REFERENCES 
-D. Abril, “Fake job postings are stealing applicants’ money and identities,” The Washington Post, December 22, 2022.  [Online]. Available: https://www.washingtonpost.com/technology/2022/12/22/job-posting-scam-tips/. [Accessed: February 9, 2023].
+Use this data set to train:
+G. Dahiya, “Satellite Imagery of Ships,” Updated Three Years Ago. [Online]. Available: https://www.kaggle.com/datasets/apollo2506/satellite-imagery-of-ships
 
-D. Shah, “Author Text Classification using Naive Bayes Algorithm,” June 19, 2020. [Online]. Available: https://rpubs.com/drshah96/629986. [Accessed: February 21, 2023].
+Use this data set to hypothesis test:
+Rhammell, “Ships in Satellite Imagery,” Updated Five Years Ago. [Online]. Available: https://www.kaggle.com/datasets/rhammell/ships-in-satellite-imagery
 
-R. Benjamin, “Scraping Glassdoor using Selenium and Python 2022,” July 9, 2022. [Online]. Available: https://medium.com/@benjaminrohan010/scraping-glassdoor-using-selenium-and-python-2022-bd0065775aec. [Accessed: February 21, 2023].
+Code for classifying ships 
+A. Sagar, “Deep Learning for Ship Detection and Segmentation,” June 18, 2019. [Online]. Available: https://towardsdatascience.com/deep-learning-for-ship-detection-and-segmentation-71d223aca649 Sagar process
 
-S. Bansal, “Real / Fake Job Posting Prediction,” February 28, 2020. [Online]. Available: https://www.kaggle.com/datasets/shivamb/real-or-fake-fake-jobposting-prediction. [Accessed: February 9, 2023].
+D. Moraite, “Detecting Ships in Satellite Imagery,” April 11, 2019. [Online]. Available: https://medium.com/dataseries/detecting-ships-in-satellite-imagery-7f0ca04e7964 Moraite process
 
-S. Loukas, “Text Classification Using Naive Bayes: Theory & A Working Example,” Towards Data Science, October 12, 2020. [Online]. Available: https://towardsdatascience.com/text-classification-using-naive-bayes-theory-a-working-example-2ef4b7eb7d5a. [Accessed February 9, 2023].
