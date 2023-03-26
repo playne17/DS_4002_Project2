@@ -1,6 +1,10 @@
-The csv file from Kaggle is 50 MB and cannot be included in git hub, but it can be accessed from the following link:
+The Data files are too large for github but can be accessed from the links below:
 
-https://www.kaggle.com/datasets/shivamb/real-or-fake-fake-jobposting-prediction
+Link for training data:
+https://www.kaggle.com/datasets/apollo2506/satellite-imagery-of-ships
+Link for testing data:
+https://www.kaggle.com/datasets/rhammell/ships-in-satellite-imagery
 
-We recommend reading the file as a csv into RStudio using the read.csv() function after downloading it onto your computer.
+
+
 
