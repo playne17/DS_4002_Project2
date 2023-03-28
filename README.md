@@ -4,12 +4,11 @@
 
 ## SRC 
 ### Installing / Building Code
-The primary reference code for preparing the data for Naive Bayes can be found here:
-https://rpubs.com/drshah96/629986
+The primary reference code for preparing the model to search our images can be found here:
+https://medium.com/dataseries/detecting-ships-in-satellite-imagery-7f0ca04e7964
 
 ### Usage of Code
-After building the Naive Bayes model, it will necessary to scrape data from Glassdoor to run it through the model. We used code from the following source:
-https://medium.com/@benjaminrohan010/scraping-glassdoor-using-selenium-and-python-2022-bd0065775aec 
+After building the model we used it to search images found in our data portion
 
 ## DATA 
 ### Data Dictionary
@@ -26,7 +25,7 @@ Rhammell, “Ships in Satellite Imagery,” Updated Five Years Ago. [Online]. Av
 ### Relevant notes about the use of data
 
 ## FIGURES 
-A confusion matrix and summary of our results are included within the figures section
+Our model training output is included. Additionally, the 4 port images we searched along with our model's predictions about ships.
 
 ### Table of Contents
 
